@@ -7,7 +7,7 @@ import { useQueries } from "@/hooks/use-queries";
 import { httpService } from "@/services/http";
 import { SavedQuery } from "@/types/query";
 import { useState } from "react";
-import { ActivityIndicator, ScrollView, StyleSheet, TouchableOpacity, View } from "react-native";
+import { ActivityIndicator, Alert, ScrollView, StyleSheet, TouchableOpacity, View } from "react-native";
 
 export default function Index() {
   const { queries, loading, updateQuery } = useQueries();
@@ -40,6 +40,8 @@ export default function Index() {
 
       await updateQuery(updatedQuery);
     } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : JSON.stringify(error);
+      Alert.alert('Error', `Failed to execute query: ${errorMessage}`);
       console.error('Error executing query:', error);
     } finally {
       setExecuting(null);
